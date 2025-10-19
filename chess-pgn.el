@@ -1,4 +1,4 @@
-;;; chess-pgn.el --- Convert a chess game to/from Portable Game Notation (PGN)
+;;; chess-pgn.el --- Convert a chess game to/from Portable Game Notation (PGN)  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2008, 2014  Free Software Foundation, Inc.
 
@@ -256,19 +256,14 @@ PGN text."
 (require 'chess-database)
 (require 'chess-file)
 
-(defvar chess-pgn-database nil
+(defvar-local chess-pgn-database nil
   "Chess database object.")
-(make-variable-buffer-local 'chess-pgn-database)
 
-(defvar chess-pgn-display nil
+(defvar-local chess-pgn-display nil
   "If non-nil, the chess display object used for this buffer.")
-(make-variable-buffer-local 'chess-pgn-display)
 
-(defvar chess-pgn-current-game)
-(defvar chess-pgn-current-index)
-
-(make-variable-buffer-local 'chess-pgn-current-game)
-(make-variable-buffer-local 'chess-pgn-current-index)
+(defvar-local chess-pgn-current-game nil)
+(defvar-local chess-pgn-current-index nil)
 
 (chess-message-catalog 'english
   '((could-not-read-pgn . "Could not read or find a PGN game")))

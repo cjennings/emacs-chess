@@ -1,4 +1,4 @@
-;;; chess-uci.el --- Common functions for the Universal Chess Interface protocol
+;;; chess-uci.el --- Common functions for the Universal Chess Interface protocol  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014  Free Software Foundation, Inc.
 

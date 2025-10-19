@@ -1,4 +1,4 @@
-;;; chess-algebraic.el --- Convert a ply to/from standard chess algebraic notation
+;;; chess-algebraic.el --- Convert a ply to/from standard chess algebraic notation  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2008, 2014  Free Software Foundation, Inc.
 

@@ -1,4 +1,4 @@
-;;; chess-crafty.el --- Play against crafty!
+;;; chess-crafty.el --- Play against crafty!  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2014  Free Software Foundation, Inc.
 
@@ -40,14 +40,10 @@
   :type 'string
   :group 'chess-crafty)
 
-(defvar chess-crafty-evaluation nil)
+(defvar-local chess-crafty-evaluation nil)
 
-(make-variable-buffer-local 'chess-crafty-evaluation)
-
-(defvar chess-crafty-analyzing-p nil
+(defvar-local chess-crafty-analyzing-p nil
   "Non-nil if Crafty is currently in analysis mode.")
-
-(make-variable-buffer-local 'chess-crafty-analyzing-p)
 
 (defvar chess-crafty-regexp-alist
   (list

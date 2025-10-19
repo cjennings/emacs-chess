@@ -1,4 +1,4 @@
-;;; chess-pos.el --- Routines for manipulating chess positions
+;;; chess-pos.el --- Routines for manipulating chess positions  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2014  Free Software Foundation, Inc.
 
@@ -93,12 +93,10 @@
   "Routines for manipulating chess positions."
   :group 'chess)
 
-(defvar chess-pos-always-white nil
+(defvar-local chess-pos-always-white nil
   "When set, it is assumed that white is always on move.
 This is really only useful when setting up training positions.
 This variable automatically becomes buffer-local when changed.")
-
-(make-variable-buffer-local 'chess-pos-always-white)
 
 (defconst chess-starting-position
   [;; the eight ranks and files of the chess position

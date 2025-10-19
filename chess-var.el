@@ -1,4 +1,4 @@
-;;; chess-var.el --- Manipulate variations
+;;; chess-var.el --- Manipulate variations  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014 Free Software Foundation, Inc.
 

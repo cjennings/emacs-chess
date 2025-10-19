@@ -1,4 +1,4 @@
-;;; chess-chat.el --- Very much like kibitzing, but not saved.
+;;; chess-chat.el --- Very much like kibitzing, but not saved  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2014 Free Software Foundation, Inc.
 
@@ -27,9 +27,7 @@
 
 (require 'chess-module)
 
-(defvar chess-chat-input-last nil)
-
-(make-variable-buffer-local 'chess-chat-input-last)
+(defvar-local chess-chat-input-last nil)
 
 (define-derived-mode chess-chat-mode text-mode "Chat"
   "A mode for editing chess annotations."

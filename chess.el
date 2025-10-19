@@ -1,4 +1,4 @@
-;;; chess.el --- Play chess in GNU Emacs
+;;; chess.el --- Play chess in GNU Emacs  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2001, 2014 Free Software Foundation, Inc.
 

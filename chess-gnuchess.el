@@ -1,4 +1,4 @@
-;;; chess-gnuchess.el --- Play against gnuchess!
+;;; chess-gnuchess.el --- Play against gnuchess!  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004  Free Software Foundation, Inc.
 
@@ -34,8 +34,7 @@
   :type 'file
   :group 'chess-gnuchess)
 
-(defvar chess-gnuchess-bad-board nil)
-(make-variable-buffer-local 'chess-gnuchess-bad-board)
+(defvar-local chess-gnuchess-bad-board nil)
 
 (defvar chess-gnuchess-regexp-alist
   (list

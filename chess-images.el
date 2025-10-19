@@ -1,4 +1,4 @@
-;;; chess-images.el --- Chessboard display style using graphical images
+;;; chess-images.el --- Chessboard display style using graphical images  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2005, 2008, 2014  Free Software Foundation, Inc.
 
@@ -40,13 +40,9 @@
   "Module for drawing a chess-display using graphical images."
   :group 'chess-display)
 
-(defvar chess-images-cache nil)
-(defvar chess-images-size nil)
-(defvar chess-images-sizes nil)
-
-(make-variable-buffer-local 'chess-images-cache)
-(make-variable-buffer-local 'chess-images-size)
-(make-variable-buffer-local 'chess-images-sizes)
+(defvar-local chess-images-cache nil)
+(defvar-local chess-images-size nil)
+(defvar-local chess-images-sizes nil)
 
 (defun chess-images-clear-image-cache (sym value)
   (set sym value)
@@ -58,9 +54,11 @@
   :group 'chess-images)
 
 (defcustom chess-images-directory
-  (if (directory-files "/usr/share/games/xboard/pixmaps" nil "\\.xpm")
-      "/usr/share/games/xboard/pixmaps"
-    (expand-file-name "pieces/xboard"
+  (or (ignore-errors
+        (when (and (file-directory-p "/usr/share/games/xboard/pixmaps")
+                   (directory-files "/usr/share/games/xboard/pixmaps" nil "\\.xpm"))
+          "/usr/share/games/xboard/pixmaps"))
+      (expand-file-name "pieces/xboard"
 		      (file-name-directory
 		       (or load-file-name buffer-file-name))))
   "Directory containing the chess piece bitmap images.

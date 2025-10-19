@@ -1,0 +1,389 @@
+#+TITLE: Emacs Chess - Compatibility and Enhancement Tasks
+#+AUTHOR: Compatibility Review for Emacs 30.2
+#+DATE: 2025-10-19
+
+* Open Work
+** DONE Add lexical-binding headers to all source files
+CLOSED: [2025-10-19 Sun 17:37]
+All 53 .el files in the main directory are missing the lexical-binding declaration.
+Only chess-polyglot.el and chess-perft.el have it currently.
+
+Modern Emacs strongly encourages lexical binding for better performance and proper
+closure semantics. Without this, code runs in dynamic binding mode which is slower
+and can lead to subtle bugs.
+
+Files affected: chess.el, chess-game.el, chess-display.el, chess-pos.el, chess-engine.el,
+chess-ply.el, chess-module.el, chess-pgn.el, chess-ics.el, chess-images.el, and 43 others.
+
+Action: Add ~;; -*- lexical-binding: t; -*-~ to the first line of each .el file.
+
+** DONE Replace make-variable-buffer-local with defvar-local
+CLOSED: [2025-10-19 Sun 17:37]
+74 occurrences of the obsolete make-variable-buffer-local pattern found across 22 files.
+
+The make-variable-buffer-local function is deprecated in favor of defvar-local (available
+since Emacs 24.3). The current pattern is:
+
+#+BEGIN_SRC emacs-lisp
+(defvar chess-display-game nil)
+(make-variable-buffer-local 'chess-display-game)
+#+END_SRC
+
+Should be replaced with:
+
+#+BEGIN_SRC emacs-lisp
+(defvar-local chess-display-game nil)
+#+END_SRC
+
+Files affected (22 total):
+- chess-display.el (12 occurrences)
+- chess-ics.el (11 occurrences)
+- chess-engine.el (9 occurrences)
+- chess-input.el (6 occurrences)
+- chess-irc.el (6 occurrences)
+- chess-pgn.el (4 occurrences)
+- chess-module.el (3 occurrences)
+- chess-images.el (3 occurrences)
+- chess-file.el (2 occurrences)
+- chess-network.el, chess-kibitz.el, chess-puzzle.el, chess-crafty.el,
+  chess-common.el, chess-clock.el, chess-chat.el, chess-database.el,
+  chess-eco.el, chess-gnuchess.el, chess-pos.el, chess-scid.el,
+  chess-sjeng.el (1-2 occurrences each)
+
+** DONE Remove obsolete cl library usage from test suite
+CLOSED: [2025-10-19 Sun 17:40]
+The file features/support/env.el:25 contained ~(require 'cl)~ which loads the
+deprecated Common Lisp emulation library.
+
+Changes made:
+- Changed ~(require 'cl)~ to ~(require 'cl-lib)~ in features/support/env.el
+- Added ~(require 'cl-lib)~ to features/step-definitions/emacs-chess-steps.el
+- Replaced 6 occurrences of ~assert~ with ~cl-assert~ in emacs-chess-steps.el
+- Fixed malformed first lines in both test files (proper lexical-binding headers)
+- Added proper file structure (headers and footers) to both test files
+
+** DONE Fix chess-images-directory defcustom error handling
+CLOSED: [2025-10-19 Sun 18:30]
+Location: chess-images.el:56-63
+Priority: HIGH - Was blocking package from loading
+
+**Issue**: After adding lexical-binding headers, the package failed to load with error:
+~Opening directory: No such file or directory, /usr/share/games/xboard/pixmaps~
+
+The ~chess-images-directory~ defcustom called ~directory-files~ without error handling,
+causing a fatal error at load time when the xboard directory didn't exist.
+
+**Solution implemented**: Used ~ignore-errors~ with ~file-directory-p~ check (option 2):
+
+#+BEGIN_SRC emacs-lisp
+(defcustom chess-images-directory
+  (or (ignore-errors
+        (when (and (file-directory-p "/usr/share/games/xboard/pixmaps")
+                   (directory-files "/usr/share/games/xboard/pixmaps" nil "\\.xpm"))
+          "/usr/share/games/xboard/pixmaps"))
+      (expand-file-name "pieces/xboard"
+                        (file-name-directory
+                         (or load-file-name buffer-file-name))))
+  ...)
+#+END_SRC
+
+**Assets added**:
+- Extracted 432 XPM image files to ~pieces/xboard/~ directory
+- Added 95 WAV sound files to ~sounds/~ directory
+- Package now includes bundled chess piece images and sounds
+- No longer requires xboard installation
+
+**Verification**: Package now loads successfully without errors.
+
+** Review and update autoload declarations
+Only 1 occurrence of declare-function found in chess-maint.el.
+
+Modern Emacs packages should properly declare external functions to avoid
+byte-compilation warnings. Consider adding declare-function statements for
+functions called from other modules.
+
+** Migrate cl-flet usage in chess-polyglot.el
+The file chess-polyglot.el uses cl-flet which has restrictions in lexical-binding mode.
+
+While cl-flet still works, consider whether cl-labels or let-bound lambdas would be
+more appropriate for lexical scope. Review usage and ensure it works correctly with
+lexical-binding: t.
+
+** Update package compatibility metadata
+The Package-Requires in chess.el:8 declares compatibility with Emacs 24:
+~;; Compatibility: Emacs24~
+
+This should be updated to reflect that the package targets modern Emacs versions.
+Consider updating to:
+~;; Compatibility: Emacs24.3+~
+
+or removing the line entirely since Package-Requires already specifies the minimum version.
+
+** Fix autosave module
+According to TODO:87, the autosave module "isn't working at all!"
+
+The chess-autosave.el module is currently non-functional and needs to be repaired
+or deprecated. This affects users who expect automatic game saving.
+
+Priority: High - this is a user-facing feature failure
+
+** Fix autosave undo support
+According to TODO:83, autosave doesn't support undoing of moves.
+
+Even if autosave is fixed, it needs proper integration with the undo system to
+handle move takebacks correctly.
+
+** Fix risky buffer-list rebinding in chess-display-list-buffers
+Location: chess-display.el:1078-1095
+
+The ~chess-display-list-buffers~ function uses a risky pattern that rebinds ~buffer-list~
+globally while calling whatever is bound to C-x C-b. This is problematic because:
+
+1. The user might have completely different keybindings (Evil, ErgoEmacs, etc.)
+2. Dynamically rebinding ~buffer-list~ while calling arbitrary code is fragile
+3. The code assumes C-x C-b invokes a command that uses ~buffer-list~
+
+Suggested fix: Instead of rebinding ~buffer-list~ and calling an arbitrary command,
+implement a proper buffer listing function that:
+- Creates a dedicated buffer like ~*Chess Buffers*~
+- Lists only chess-related buffers directly
+- Provides proper keybindings for switching to listed buffers
+
+Code location: chess-display.el:1082-1095
+
+** Remove unused FILE parameter from chess-autosave-write
+Location: chess-autosave.el:118
+
+The function ~chess-autosave-write~ declares a FILE parameter in its signature but
+never uses it. The function operates on the current buffer instead.
+
+#+BEGIN_SRC emacs-lisp
+(defun chess-autosave-write (game file)  ;FIXME: `file' is not used!
+  ;; Function body uses current-buffer, not file
+  ...)
+#+END_SRC
+
+This is misleading to callers. Options:
+1. Remove the FILE parameter if it's truly unnecessary
+2. Use the FILE parameter to visit/create the appropriate buffer
+3. Add a docstring note explaining why FILE is declared but unused
+
+Note: Check all callers at chess-autosave.el:67,84 before removing the parameter.
+
+** Remove unused FILE parameter from chess-autosave-read
+Location: chess-autosave.el:138
+
+Similar to ~chess-autosave-write~, the function ~chess-autosave-read~ declares a FILE
+parameter but never uses it. The function operates on the current buffer.
+
+#+BEGIN_SRC emacs-lisp
+(defun chess-autosave-read (game file)  ;FIXME: `file' is not used!
+  ;; Function body uses current-buffer, not file
+  ...)
+#+END_SRC
+
+Same resolution options as above. Check caller at chess-autosave.el:67.
+
+** Remove or implement unused INDEX parameter in chess-puzzle
+Location: chess-puzzle.el:96
+
+The ~chess-puzzle~ function declares an optional INDEX parameter but never uses it.
+
+#+BEGIN_SRC emacs-lisp
+(defun chess-puzzle (file &optional index) ;FIXME: index not used!
+  "Pick a random puzzle from FILE..."
+  ;; Implementation picks a random puzzle, ignoring index
+  ...)
+#+END_SRC
+
+Options:
+1. Remove the INDEX parameter if not needed
+2. Implement INDEX to allow starting from a specific puzzle number
+3. Use INDEX to select a specific puzzle instead of random selection
+
+The second option would be most useful for users who want to work through
+puzzles sequentially or return to a specific puzzle.
+
+** Implement en passant support in chess-polyglot
+Location: chess-polyglot.el:455
+
+The Polyglot opening book hash calculation has incomplete en passant support:
+
+#+BEGIN_SRC emacs-lisp
+;; TODO: en passant
+(when (chess-pos-side-to-move position)
+  ;; Only handles turn, not en passant square
+  ...)
+#+END_SRC
+
+According to the Polyglot spec, the hash should include the en passant file
+(if an en passant capture is possible). This affects the accuracy of opening
+book lookups when en passant is available.
+
+Need to:
+1. Detect when en passant is possible in the position
+2. Get the en passant target square/file
+3. XOR with appropriate Polyglot hash keys (indices 772-779)
+
+Reference: See Polyglot book format specification linked in file header.
+
+** Update compatibility field version
+The compatibility field in chess.el shows "Emacs24" but the code has been updated
+to use features from later versions (like cl-lib 0.5).
+
+Update to accurately reflect minimum supported version (probably Emacs 24.3+ given
+the cl-lib requirement and recommended use of defvar-local).
+
+* Enhancements
+** Add comprehensive byte-compilation testing
+Currently there is no systematic byte-compilation testing in the build process.
+
+Recommendation: Add a build target that byte-compiles all files with warnings
+treated as errors to catch compatibility issues early:
+
+#+BEGIN_SRC makefile
+check-compile:
+	$(EMACS) --batch --eval "(setq byte-compile-error-on-warn t)" \
+	  -f batch-byte-compile *.el
+#+END_SRC
+
+** Improve module loading performance
+The package uses eval-when-compile extensively but could benefit from autoloading
+optimization.
+
+Recommendations:
+- Review autoload cookies (;;;###autoload) for all public entry points
+- Consider lazy loading for rarely-used modules (e.g., chess-german.el)
+- Use with-eval-after-load instead of eval-after-load where applicable
+
+** Add package-lint compliance
+Run package-lint to ensure compliance with ELPA packaging standards.
+
+This will catch common issues like:
+- Missing or malformed headers
+- Undeclared dependencies
+- Non-standard file naming
+- Missing documentation strings
+
+** Optimize position evaluation performance
+TODO:268-286 notes performance investigation by Mario Lang regarding chess-pos.el.
+
+Specific optimization opportunities identified:
+- Cache characterp checks (called 3+ times redundantly)
+- Pre-define direction lists as defconst instead of inline quoted lists
+- Optimize chess--add-candidates to avoid redundant check-only tests
+- Consider separate fast path for (memq piece '(nil t)) case
+
+** Add CI/CD integration
+The package has good test infrastructure (ERT + Cucumber) but no continuous integration.
+
+Recommendations:
+- Add GitHub Actions workflow for automated testing
+- Test against multiple Emacs versions (26.1, 27.1, 28.1, 29.1, 30.1+)
+- Run byte-compilation checks on all commits
+- Optionally run perft and PGN parsing tests
+
+** Modernize process communication
+The package uses traditional process-sentinel and process-filter patterns.
+
+Consider modernizing with:
+- process-live-p instead of manual process state tracking
+- make-process instead of start-process (cleaner API)
+- Better error handling for process failures
+
+** Add use-package integration examples
+Many modern Emacs users use use-package for configuration.
+
+Add documentation showing recommended use-package configuration:
+#+BEGIN_SRC emacs-lisp
+(use-package chess
+  :ensure t
+  :config
+  (setq chess-default-display '(chess-images chess-ics1 chess-plain)
+        chess-default-engine '(chess-stockfish chess-crafty chess-gnuchess)))
+#+END_SRC
+
+** Improve error messages and user feedback
+TODO:104-110 suggests creating better error hierarchy.
+
+Instead of generic (error) calls, use custom error symbols:
+- chess-illegal-move
+- chess-invalid-position
+- chess-invalid-fen
+- chess-engine-error
+
+This allows callers to handle specific error types appropriately.
+
+** Add transient.el menus for common operations
+Modern Emacs packages often use transient.el (the Magit menu system) for
+discoverable command interfaces.
+
+Consider adding transient menus for:
+- Game management (new, save, load, resign)
+- Display options (toggle highlighting, change piece set)
+- Engine configuration (select engine, set difficulty)
+- Analysis commands (evaluate position, suggest move)
+
+** Document Unicode piece display option
+The package includes chess-plain.el for ASCII display but could support Unicode
+chess symbols (♔♕♖♗♘♙♚♛♜♝♞♟) as a middle-ground display option.
+
+This would work in terminal Emacs with Unicode support and look better than ASCII.
+
+** Add completion-at-point for algebraic notation
+In PGN mode and game input, implement completion-at-point-functions to offer
+legal moves as completions.
+
+This would make move entry much faster and reduce illegal move errors.
+
+** Optimize memory usage for large databases
+The package can handle large PGN databases but loads entire games into memory.
+
+Recommendations:
+- Implement lazy loading for large multi-game PGN files
+- Add pagination for database browsing
+- Consider SQLite backend for very large databases (chess-scid.el exists but could be enhanced)
+
+** Add native-compilation support markers
+For Emacs 28+ with native compilation, consider adding:
+- native-comp-speed and native-comp-debug declarations
+- Review performance with native compilation enabled
+- Document any native-comp specific issues
+
+** Improve accessibility features
+The package was designed with accessibility in mind (braille display support,
+audio announcements) but could be enhanced:
+
+- Better screen reader support (ARIA-like annotations)
+- Keyboard-only navigation improvements
+- High-contrast themes for visually impaired users
+- Configurable announcement verbosity levels
+
+** Add analysis engine integration
+TODO:41-48 suggests adding position analysis commands.
+
+Modern chess engines (Stockfish, Lc0) provide rich analysis:
+- Multi-PV (principal variation) analysis
+- Evaluation scores
+- Best move suggestions
+- Threat detection
+
+Integrate these features into the UI with configurable depth and display options.
+
+** Implement game clocks with better precision
+TODO:100-103 notes clock reliability issues on ICS.
+
+Recommendations:
+- Use higher precision timers (run-at-time with fractional seconds)
+- Add visual/audio warnings for time trouble
+- Support increment and delay time controls properly
+- Add time odds support for handicap games
+
+** Add opening book trainer mode
+The package has Polyglot opening book support but no training mode.
+
+Create a training mode that:
+- Quizzes users on opening moves from their repertoire
+- Tracks statistics on opening knowledge
+- Supports spaced repetition for learning
+- Integrates with popular opening book formats

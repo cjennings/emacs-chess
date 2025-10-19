@@ -1,4 +1,4 @@
-;;; chess-sjeng.el --- Play against sjeng!
+;;; chess-sjeng.el --- Play against sjeng!  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 
@@ -33,9 +33,7 @@
   :type 'file
   :group 'chess-sjeng)
 
-(defvar chess-sjeng-evaluation nil)
-
-(make-variable-buffer-local 'chess-sjeng-evaluation)
+(defvar-local chess-sjeng-evaluation nil)
 
 (defvar chess-sjeng-regexp-alist
   (list

@@ -1,4 +1,4 @@
-;;; chess-engine.el --- Obtain movements and other information from an engine
+;;; chess-engine.el --- Obtain movements and other information from an engine  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014 Free Software Foundation, Inc.
 
@@ -25,28 +25,17 @@
   "Code for reading movements and other commands from an engine."
   :group 'chess)
 
-(defvar chess-engine-regexp-alist nil)
-(defvar chess-engine-response-handler nil)
-(defvar chess-engine-current-marker nil)
-(defvar chess-engine-pending-offer nil)
-(defvar chess-engine-pending-arg nil)
-(defvar chess-engine-opponent-name nil)
+(defvar-local chess-engine-regexp-alist nil)
+(defvar-local chess-engine-response-handler nil)
+(defvar-local chess-engine-current-marker nil)
+(defvar-local chess-engine-pending-offer nil)
+(defvar-local chess-engine-pending-arg nil)
+(defvar-local chess-engine-opponent-name nil)
 
-(make-variable-buffer-local 'chess-engine-regexp-alist)
-(make-variable-buffer-local 'chess-engine-response-handler)
-(make-variable-buffer-local 'chess-engine-current-marker)
-(make-variable-buffer-local 'chess-engine-pending-offer)
-(make-variable-buffer-local 'chess-engine-pending-arg)
-(make-variable-buffer-local 'chess-engine-opponent-name)
-
-(defvar chess-engine-process nil)
-(defvar chess-engine-last-pos nil)
-(defvar chess-engine-working nil)
+(defvar-local chess-engine-process nil)
+(defvar-local chess-engine-last-pos nil)
+(defvar-local chess-engine-working nil)
 (defvar chess-engine-handling-event nil)
-
-(make-variable-buffer-local 'chess-engine-process)
-(make-variable-buffer-local 'chess-engine-last-pos)
-(make-variable-buffer-local 'chess-engine-working)
 
 (defvar chess-engine-inhibit-auto-pass nil)
 

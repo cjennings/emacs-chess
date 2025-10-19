@@ -1,4 +1,4 @@
-;;; chess-kibitz.el --- Chess kibitzing, stored as annotations
+;;; chess-kibitz.el --- Chess kibitzing, stored as annotations  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2014 Free Software Foundation, Inc.
 
@@ -28,11 +28,8 @@
 
 (require 'chess-game)
 
-(defvar chess-kibitz-input-last nil)
-(defvar chess-kibitz-index nil)
-
-(make-variable-buffer-local 'chess-kibitz-input-last)
-(make-variable-buffer-local 'chess-kibitz-index)
+(defvar-local chess-kibitz-input-last nil)
+(defvar-local chess-kibitz-index nil)
 
 (define-derived-mode chess-kibitz-mode text-mode "Kibitz"
   "A mode for editing chess annotations."

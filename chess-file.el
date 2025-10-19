@@ -1,4 +1,4 @@
-;;; chess-file.el --- Handle chess databases stored in PGN or EPD files
+;;; chess-file.el --- Handle chess databases stored in PGN or EPD files  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2014  Free Software Foundation, Inc.
 
@@ -29,14 +29,12 @@
 
 (require 'chess-fen)
 
-(defvar chess-file-locations nil
+(defvar-local chess-file-locations nil
   "A list of starting positions of individual records of this collection.")
-(make-variable-buffer-local 'chess-file-locations)
 
-(defvar chess-file-type nil
+(defvar-local chess-file-type nil
   "The file format type of this database instance (a symbol).
 See `chess-file-types' for details.")
-(make-variable-buffer-local 'chess-file-type)
 
 (defvar chess-file-types
   `((pgn "^\\[Event " chess-pgn-to-game chess-game-to-pgn (?\n ?\n))

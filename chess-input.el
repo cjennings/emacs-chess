@@ -1,4 +1,4 @@
-;;; chess-input.el --- Keyboard entry of algebraic notation, using shortcut notation
+;;; chess-input.el --- Keyboard entry of algebraic notation, using shortcut notation  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2005, 2014 Free Software Foundation, Inc.
 
@@ -36,19 +36,12 @@
 (require 'chess-ply)
 (require 'chess-pos)
 
-(defvar chess-input-move-string "")
-(defvar chess-input-moves-pos nil)
-(defvar chess-input-moves nil)
-(defvar chess-input-position-function nil)
-(defvar chess-input-my-color-function nil)
-(defvar chess-input-move-function nil)
-
-(make-variable-buffer-local 'chess-input-move-string)
-(make-variable-buffer-local 'chess-input-moves-pos)
-(make-variable-buffer-local 'chess-input-moves)
-(make-variable-buffer-local 'chess-input-position-function)
-(make-variable-buffer-local 'chess-input-my-color-function)
-(make-variable-buffer-local 'chess-input-move-function)
+(defvar-local chess-input-move-string "")
+(defvar-local chess-input-moves-pos nil)
+(defvar-local chess-input-moves nil)
+(defvar-local chess-input-position-function nil)
+(defvar-local chess-input-my-color-function nil)
+(defvar-local chess-input-move-function nil)
 
 (defun chess-input-test-move (ply)
   "Return the given PLY if it matches the user's current input."

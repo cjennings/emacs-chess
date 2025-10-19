@@ -1,4 +1,4 @@
-;;; chess-network.el --- Play against an opponent over the network
+;;; chess-network.el --- Play against an opponent over the network  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2003, 2008  Free Software Foundation, Inc.
 
@@ -123,8 +123,7 @@
     (setq str (replace-match "\n" t t str)))
   str)
 
-(defvar chess-network-kind)
-(make-variable-buffer-local 'chess-network-kind)
+(defvar-local chess-network-kind nil)
 
 (defun chess-network-handler (game event &rest args)
   "Initialize the network chess engine."

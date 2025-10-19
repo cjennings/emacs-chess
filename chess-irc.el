@@ -1,4 +1,4 @@
-;;; chess-irc.el --- This transport uses an IRC bot to send/receive moves.
+;;; chess-irc.el --- This transport uses an IRC bot to send/receive moves.  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014 Free Software Foundation, Inc.
 
@@ -57,19 +57,12 @@
 			 (chess-message 'opponent-says
 					(match-string 0))))))))
 
-(defvar chess-irc-process)
-(defvar chess-irc-engine)
-(defvar chess-irc-opponent)
-(defvar chess-irc-working nil)
-(defvar chess-irc-last-pos nil)
-(defvar chess-irc-use-ctcp nil)
-
-(make-variable-buffer-local 'chess-irc-process)
-(make-variable-buffer-local 'chess-irc-engine)
-(make-variable-buffer-local 'chess-irc-opponent)
-(make-variable-buffer-local 'chess-irc-working)
-(make-variable-buffer-local 'chess-irc-last-pos)
-(make-variable-buffer-local 'chess-irc-use-ctcp)
+(defvar-local chess-irc-process nil)
+(defvar-local chess-irc-engine nil)
+(defvar-local chess-irc-opponent nil)
+(defvar-local chess-irc-working nil)
+(defvar-local chess-irc-last-pos nil)
+(defvar-local chess-irc-use-ctcp nil)
 
 (defun chess-irc-handler (game event &rest args)
   "This is an example of a generic transport engine."

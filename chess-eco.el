@@ -1,4 +1,4 @@
-;;; chess-eco.el --- Chess opening classification
+;;; chess-eco.el --- Chess opening classification  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2004, 2014  Free Software Foundation, Inc.
 
@@ -77,8 +77,7 @@
 	       (current-buffer))
 	(write-file (cadr command-line-args-left))))))
 
-(defvar chess-eco-last-opening nil)
-(make-variable-buffer-local 'chess-eco-last-opening)
+(defvar-local chess-eco-last-opening nil)
 
 (defun chess-eco-classify (game)
   (when chess-eco-hash-table

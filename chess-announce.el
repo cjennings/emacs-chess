@@ -1,4 +1,4 @@
-;;; chess-announce.el --- Scheme to verbally announce chess moves
+;;; chess-announce.el --- Scheme to verbally announce chess moves  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004  Free Software Foundation, Inc.
 

@@ -1,4 +1,4 @@
-;;; chess-game.el --- Maintain a chess game that is being played or viewed
+;;; chess-game.el --- Maintain a chess game that is being played or viewed  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2014  Free Software Foundation, Inc.
 

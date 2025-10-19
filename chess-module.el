@@ -1,4 +1,4 @@
-;;; chess-module.el --- Basic module support code underlying all chess.el modules
+;;; chess-module.el --- Basic module support code underlying all chess.el modules  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2008, 2014  Free Software Foundation, Inc.
 
@@ -24,13 +24,9 @@
 
 (require 'chess-game)
 
-(defvar chess-module-game nil)
-(defvar chess-module-event-handler nil)
-(defvar chess-module-leader nil)
-
-(make-variable-buffer-local 'chess-module-game)
-(make-variable-buffer-local 'chess-module-event-handler)
-(make-variable-buffer-local 'chess-module-leader)
+(defvar-local chess-module-game nil)
+(defvar-local chess-module-event-handler nil)
+(defvar-local chess-module-leader nil)
 
 (chess-message-catalog 'english
   '((no-such-module . "There is no module named '%s'")))

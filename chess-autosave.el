@@ -1,4 +1,4 @@
-;;; chess-autosave.el --- A special kind of display that merely autosaves the game
+;;; chess-autosave.el --- A special kind of display that merely autosaves the game  -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2002, 2004, 2014 Free Software Foundation, Inc.
 

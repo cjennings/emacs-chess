@@ -1,4 +1,4 @@
-;;; chess-scid.el --- A game database that uses SCID for storage/retrieval
+;;; chess-scid.el --- A game database that uses SCID for storage/retrieval  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2008  Free Software Foundation, Inc.
 
@@ -37,9 +37,7 @@
   '((failed-load     . "Failed to load game %d from ChessDB")
     (failed-find-end . "Failed to locate end of game %d in ChessDB")))
 
-(defvar chess-scid-process)
-
-(make-variable-buffer-local 'chess-scid-process)
+(defvar-local chess-scid-process nil)
 
 (defsubst chess-scid-send (string)
   (process-send-string chess-scid-process (concat string "\n")))

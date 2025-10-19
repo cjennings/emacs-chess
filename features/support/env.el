@@ -1,3 +1,5 @@
+;;; env.el --- Test environment setup  -*- lexical-binding: t; -*-
+
 (require 'f)
 
 (defvar emacs-chess-support-path
@@ -22,7 +24,7 @@
 (require 'chess)
 (require 'espuds)
 (require 'ert)
-(require 'cl)
+(require 'cl-lib)
 
 (Setup
  (defvar test-display nil)
@@ -62,3 +64,5 @@
 (Teardown
  ;; After when everything has been run
  )
+
+;;; env.el ends here

@@ -1,4 +1,4 @@
-;;; chess-ai.el --- A native Emacs Lisp Chess playing module
+;;; chess-ai.el --- A native Emacs Lisp Chess playing module  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014  Free Software Foundation, Inc.
 

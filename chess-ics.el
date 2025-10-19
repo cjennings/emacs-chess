@@ -1,4 +1,4 @@
-;;; chess-ics.el --- Play on Internet Chess Servers
+;;; chess-ics.el --- Play on Internet Chess Servers  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2003, 2004, 2014  Free Software Foundation, Inc.
 
@@ -68,8 +68,6 @@ The format of each entry is:
 			       (repeat string))))
   :group 'chess-ics)
 
-
-
 (defcustom chess-ics-initial-commands
   (list
    (list "freechess.org"
@@ -103,27 +101,22 @@ string which should be sent (newline characters will be added automatically.)"
   :group 'chess-ics
   :type 'regexp)
 
-(defvar chess-ics-server nil
+(defvar-local chess-ics-server nil
   "The ICS server name of this connection.")
-(make-variable-buffer-local 'chess-ics-server)
 
-(defvar chess-ics-handle nil
+(defvar-local chess-ics-handle nil
   "The ICS handle of this connection.")
-(make-variable-buffer-local 'chess-ics-handle)
 
-(defvar chess-ics-password nil
+(defvar-local chess-ics-password nil
   "Password to use to identify to the server.")
-(make-variable-buffer-local 'chess-ics-password)
 
-(defvar chess-ics-handling-login nil
+(defvar-local chess-ics-handling-login nil
   "Non-nil if we are currently handling the ICS login sequence.")
-(make-variable-buffer-local 'chess-ics-handling-login)
 
-(defvar chess-ics-server-type 'FICS
+(defvar-local chess-ics-server-type 'FICS
   "The type of chss server we are about to connect too.
 Possible values are currently FICS (the default, and best supported)
 and ICC.")
-(make-variable-buffer-local 'chess-ics-server-type)
 
 (defcustom chess-ics-icc-datagrams '(22 23 26 33 50 51 56 110 111)
   "*A list of datagrams to request when connecting to ICC."
@@ -138,22 +131,19 @@ and ICC.")
 			 (const :tag "DG_POSITION_BEGIN2" 110)
 			 (const :tag "DG_PAST_MOVE" 111))))
 
-(defvar chess-ics-movelist-game-number nil
+(defvar-local chess-ics-movelist-game-number nil
   "If we are about to receive a movelist, this variable is set to the
 game number.")
-(make-variable-buffer-local 'chess-ics-movelist-game-number)
 
-(defvar chess-ics-movelist-game nil
+(defvar-local chess-ics-movelist-game nil
   "If we are receiving a movelist, this variable is set to the game object.")
-(make-variable-buffer-local 'chess-ics-movelist-game)
 
-(defvar chess-ics-movelist-start-position chess-starting-position
+(defvar-local chess-ics-movelist-start-position chess-starting-position
   "The starting position to use upon receiving of a movelist.
 It is possible to configure certain servers to automatically send a
 style12 board before sending a movelist, to allow retrieval of
 the movelist for a non-standard game (one which does not start at the
 standard position).  In those cases, this variable should be set to nil.")
-(make-variable-buffer-local 'chess-ics-movelist-start-position)
 
 (defsubst chess-ics-send (string &optional buffer)
   "Send STRING to the ICS server."
@@ -430,10 +420,9 @@ standard position).  In those cases, this variable should be set to nil.")
 The car of each element is the regexp to try, and the cdr is a function
 to run whenever the regexp matches.")
 
-(defvar chess-ics-sessions nil
+(defvar-local chess-ics-sessions nil
   "A list of chess-sessions spawned from an Internet Chess Server connection.
 See `chess-ics-game'.")
-(make-variable-buffer-local 'chess-ics-sessions)
 
 (defun chess-ics-game (game-number &rest tags)
   "Either create, or retrieve an existing game object with GAME-NUMBER."
@@ -673,9 +662,8 @@ See `chess-ics-game'.")
 	  (forward-line -1)))
       t)))
 
-(defvar chess-ics-sought-parent-buffer nil
+(defvar-local chess-ics-sought-parent-buffer nil
   "Contains the buffer from which this seektable originates.")
-(make-variable-buffer-local 'chess-ics-sought-parent-buffer)
 
 (defun chess-ics-sought-accept (button)
   "Perform the action specified by a BUTTON."
@@ -782,8 +770,6 @@ This function should be put on `comint-preoutput-filter-functions'."
 	      (when (/= (length tabulated-list-entries) old-length)
 		(tabulated-list-revert))))))))
   string)
-
-(make-variable-buffer-local 'comint-preoutput-filter-functions)
 
 ;;;###autoload
 (defun chess-ics (server port &optional handle password-or-filename

@@ -1,4 +1,4 @@
-;;; chess-tutorial.el --- A simple chess training display
+;;; chess-tutorial.el --- A simple chess training display  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2014  Free Software Foundation, Inc.
 

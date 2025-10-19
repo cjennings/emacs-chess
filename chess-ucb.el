@@ -1,4 +1,4 @@
-;;; chess-ucb.el --- Engine interface to the Novag Universal Chess Board
+;;; chess-ucb.el --- Engine interface to the Novag Universal Chess Board  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2014 Free Software Foundation, Inc.
 

@@ -1,4 +1,4 @@
-;;; chess-display.el --- Code shared by all chess displays
+;;; chess-display.el --- Code shared by all chess displays  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2005, 2008, 2014  Free Software Foundation, Inc.
 
@@ -40,7 +40,6 @@
 occurs."
   :type 'boolean
   :group 'chess-display)
-
 (make-variable-buffer-local 'chess-display-popup)
 
 (defcustom chess-display-highlight-legal nil
@@ -117,26 +116,16 @@ See `mode-line-format' for syntax details."
 ;; User interface
 ;;
 
-(defvar chess-display-index)
-(defvar chess-display-move-text)
-(defvar chess-display-side-to-move)
-(defvar chess-display-perspective)
-(defvar chess-display-event-handler nil)
-(defvar chess-display-edit-mode nil)
-(defvar chess-display-index-positions nil)
-(defvar chess-display-last-selected nil)
-(defvar chess-display-highlighted-legal nil)
-
-(make-variable-buffer-local 'chess-display-index)
-(make-variable-buffer-local 'chess-display-move-text)
-(make-variable-buffer-local 'chess-display-side-to-move)
+(defvar-local chess-display-index nil)
+(defvar-local chess-display-move-text nil)
+(defvar-local chess-display-side-to-move nil)
 (put 'chess-display-side-to-move 'risky-local-variable t)
-(make-variable-buffer-local 'chess-display-perspective)
-(make-variable-buffer-local 'chess-display-event-handler)
-(make-variable-buffer-local 'chess-display-edit-mode)
-(make-variable-buffer-local 'chess-display-index-positions)
-(make-variable-buffer-local 'chess-display-last-selected)
-(make-variable-buffer-local 'chess-display-highlighted-legal)
+(defvar-local chess-display-perspective nil)
+(defvar-local chess-display-event-handler nil)
+(defvar-local chess-display-edit-mode nil)
+(defvar-local chess-display-index-positions nil)
+(defvar-local chess-display-last-selected nil)
+(defvar-local chess-display-highlighted-legal nil)
 
 
 (defvar chess-display-handling-event nil
@@ -214,8 +203,7 @@ of the board, if non-nil, the board is viewed from White's perspective."
       (chess-game-set-data chess-module-game 'my-color t))
     (chess-display-set-index nil 0)))
 
-(defvar chess-display-edit-position nil)
-(make-variable-buffer-local 'chess-display-edit-position)
+(defvar-local chess-display-edit-position nil)
 
 (defun chess-display-position (display)
   "Return the position currently viewed on DISPLAY."
@@ -875,9 +863,7 @@ The key bindings available in this mode are:
 
 (defvar chess-display-search-direction nil)
 (defvar chess-current-display nil)
-(defvar chess-display-previous-index nil)
-
-(make-variable-buffer-local 'chess-display-previous-index)
+(defvar-local chess-display-previous-index nil)
 
 (chess-message-catalog 'english
   '((san-not-found . "Could not find a matching move")))

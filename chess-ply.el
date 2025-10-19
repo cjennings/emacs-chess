@@ -1,4 +1,4 @@
-;;; chess-ply.el --- Routines for manipulating chess plies
+;;; chess-ply.el --- Routines for manipulating chess plies  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2008, 2014  Free Software Foundation, Inc.
 

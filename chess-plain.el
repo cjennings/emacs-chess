@@ -1,4 +1,4 @@
-;;; chess-plain.el --- Plain ASCII chess display
+;;; chess-plain.el --- Plain ASCII chess display  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002-2005, 2014  Free Software Foundation, Inc.
 

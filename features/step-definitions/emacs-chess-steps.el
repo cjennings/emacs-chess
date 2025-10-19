@@ -1,6 +1,12 @@
+;;; emacs-chess-steps.el --- Project specific step definitions  -*- lexical-binding: t; -*-
+
 ;; This file contains your project specific step definitions. All
 ;; files in this directory whose names end with "-steps.el" will be
 ;; loaded automatically by Ecukes.
+
+;;; Code:
+
+(require 'cl-lib)
 
 (Given "^ics session$"
        (lambda ()
@@ -75,7 +81,7 @@
 (Then "^the move \"\\([a-h][1-8]\\)-\\([a-h][1-8]\\)\" is illegal$"
       (lambda (source target)
         (let ((position (chess-display-position test-display)))
-          (assert (null (chess-ply-create position nil
+          (cl-assert (null (chess-ply-create position nil
                                           (chess-coord-to-index source)
                                           (chess-coord-to-index target)))))))
 
@@ -107,7 +113,7 @@
       (lambda (times micros)
         (dotimes (i (string-to-number times))
           (let ((ply (chess-game-ply chess-module-game (1- (- chess-display-index i)))))
-            (assert (< (measure-time (chess-display-paint-move nil ply))
+            (cl-assert (< (measure-time (chess-display-paint-move nil ply))
                        (/ (string-to-number micros) 1e6)))))))
 
 (Given "^I start server and client$"
@@ -164,10 +170,10 @@
                                               chess-display-legal-move-color)
                                              (t chess-display-last-move-color))
                                        (chess-coord-to-index source))
-              (assert (equal prop (get-text-property 
+              (cl-assert (equal prop (get-text-property 
                                    (chess-display-index-pos nil (chess-coord-to-index source))
                                    'display))))
-          (assert (eq (get-text-property 
+          (cl-assert (eq (get-text-property 
                        (chess-display-index-pos nil (chess-coord-to-index source))
                        'face) (cond ((string= kind "selected") 'chess-ics1-highlight-face)
                                     (t 'chess-display-highlight)))))))
@@ -179,9 +185,11 @@
                                      (chess-display-index-pos nil (chess-coord-to-index source))
                                      'display))))
               (chess-display-unhighlight-square nil (chess-coord-to-index source))
-              (assert (equal prop (get-text-property 
+              (cl-assert (equal prop (get-text-property 
                                    (chess-display-index-pos nil (chess-coord-to-index source))
                                    'display))))
-          (assert (not (eq (get-text-property 
+          (cl-assert (not (eq (get-text-property 
                             (chess-display-index-pos nil (chess-coord-to-index source))
                             'face) 'chess-display-highlight))))))
+
+;;; emacs-chess-steps.el ends here

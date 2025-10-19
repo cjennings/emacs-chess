@@ -1,4 +1,4 @@
-;;; chess-common.el --- Handler functions common to xboard based engine protocols
+;;; chess-common.el --- Handler functions common to xboard based engine protocols  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2014  Free Software Foundation, Inc.
 
@@ -35,10 +35,8 @@
 (require 'chess-engine)
 (require 'chess-message)
 
-(defvar chess-common-engine-name nil)
-(defvar chess-common-temp-files nil)
-(make-variable-buffer-local 'chess-common-engine-name)
-(make-variable-buffer-local 'chess-common-temp-files)
+(defvar-local chess-common-engine-name nil)
+(defvar-local chess-common-temp-files nil)
 
 (defmacro chess-with-temp-file (&rest body)
   `(let ((file (make-temp-file "chess")))

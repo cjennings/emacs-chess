@@ -1,4 +1,4 @@
-;;; chess-puzzle.el --- Support for viewing and solving chess puzzles
+;;; chess-puzzle.el --- Support for viewing and solving chess puzzles  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2008, 2014  Free Software Foundation, Inc.
 
@@ -63,11 +63,8 @@ it.  Useful if you have all of your puzzles in a single file."
   :type 'boolean
   :group 'chess-puzzle)
 
-(defvar chess-puzzle-indices nil)
-(defvar chess-puzzle-position nil)
-
-(make-variable-buffer-local 'chess-puzzle-indices)
-(make-variable-buffer-local 'chess-puzzle-position)
+(defvar-local chess-puzzle-indices nil)
+(defvar-local chess-puzzle-position nil)
 
 (chess-message-catalog 'english
   '((bad-game-read . "Error reading game at position %d")
@@ -180,7 +177,6 @@ making it easy to go on to the next puzzle once you've solved one."
 		       (concat ", predicted variation "
 			       (chess-var-to-algebraic pv))
 		     "")))))))
-
 
 (defun chess-puzzle-handler (game display event &rest _args)
   (if (and (eq event 'move)

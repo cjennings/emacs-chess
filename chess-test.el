@@ -1,4 +1,4 @@
-;;; chess-test.el --- Put Emacs Chess through an enormous battery of tests
+;;; chess-test.el --- Put Emacs Chess through an enormous battery of tests  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014 Free Software Foundation, Inc.
 

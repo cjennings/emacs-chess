@@ -1,4 +1,4 @@
-;;; chess-clock.el --- Implements a chess clock
+;;; chess-clock.el --- Implements a chess clock  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2002, 2004, 2014  Free Software Foundation, Inc.
 
@@ -24,11 +24,8 @@
 (require 'chess-game)
 (require 'chess-module)
 
-(defvar chess-clock-last-time nil)
-(defvar chess-clock-timer nil)
-
-(make-variable-buffer-local 'chess-clock-last-time)
-(make-variable-buffer-local 'chess-clock-timer)
+(defvar-local chess-clock-last-time nil)
+(defvar-local chess-clock-timer nil)
 
 (defsubst chess-clock-add-seconds (time seconds)
   "To TIME, add SECONDS.  Return result as a time value."
